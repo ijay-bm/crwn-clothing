@@ -6,14 +6,7 @@ import type { Product } from "~/types/product.types";
 
 import ProductCard from "./product-card";
 
-/**
- * TODO - add skeletal loader and loading state
- * TODO - Pass loading state to ProductCard for control over the loader
- * TODO - should I have one loader for this whole preview or have indidividualloaders for each ProductCard
- */
 export default function CategoryPreview({ category }: { category: Category }) {
-  // TODO fetch products here since we only need four?
-
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {

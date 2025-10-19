@@ -1,5 +1,7 @@
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { errorHandler } from "~/firebase/errorHandler";
 import { categoryService } from "~/services/category.service";
 import { productService } from "~/services/product.service";
 import type { Category } from "~/types/category.types";
@@ -7,50 +9,87 @@ import type { Product } from "~/types/product.types";
 
 import ProductCard from "./product-card";
 
-/**
- * TODO - add skeletal loader and loading state
- * TODO - Pass loading state to ProductCard for control over the loader
- * TODO - should I have one loader for this whole preview or have indidividualloaders for each ProductCard
- */
 export default function CategoryProducts({
   categoryId,
 }: {
   categoryId: string;
 }) {
-  // TODO fetch products here since we only need four?
+  const [loading, setLoading] = useState(false);
+  const [loadingCategory, setLoadingCategory] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState(false);
 
   const [category, setCategory] = useState<Category>();
 
   const [products, setProducts] = useState<Product[]>([]);
 
-  useEffect(() => {
-    categoryService.find(categoryId).then(category => {
-      if (!category) {
+  async function findCategory() {
+    try {
+      setLoadingCategory(true);
+      const categoryResponse = await categoryService.find(categoryId);
+      if (!categoryResponse) {
         return;
       }
-      setCategory(category);
+      setCategory(categoryResponse);
+      return categoryResponse;
+    } catch (error: unknown) {
+      errorHandler(error);
+    } finally {
+      setLoadingCategory(false);
+    }
+  }
 
-      productService.getByCategoryIds([category.id]).then(setProducts);
-    });
+  async function getProducts() {
+    try {
+      setLoadingProducts(true);
+      const productsResponse = await productService.getByCategoryIds([
+        categoryId,
+      ]);
+      setProducts(productsResponse);
+      return productsResponse;
+    } catch (error: unknown) {
+      errorHandler(error);
+    } finally {
+      setLoadingProducts(false);
+    }
+  }
 
-    return;
+  async function findCategoryAndGetProductsByCategoryIds() {
+    try {
+      setLoading(true);
+      const categoryResponse = await findCategory();
+      if (!categoryResponse) {
+        return;
+      }
+      await getProducts();
+    } catch (error: unknown) {
+      errorHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    findCategoryAndGetProductsByCategoryIds();
   }, []);
 
   return (
-    // TODO handle better later
     category && (
       <div className="mb-8 flex flex-col">
-        <Link
-          className="mb-6 flex w-min cursor-pointer text-3xl font-normal
-            transition-all duration-300 hover:opacity-80"
-          // to={`/shop/${category.title.toLowerCase()}?categoryId=${category.id}`}
-          to={{
-            pathname: "/shop",
-            search: `?categoryId=${category.id}`,
-          }}
-        >
-          {category.title.toUpperCase()}
-        </Link>
+        <div className="mb-6 flex justify-center">
+          <Link
+            className={clsx(
+              `flex w-min cursor-pointer text-3xl font-normal text-neutral-800
+              transition-all duration-300 hover:opacity-80`,
+              {},
+            )}
+            to={{
+              pathname: "/shop",
+              search: `?categoryId=${category.id}`,
+            }}
+          >
+            {category.title.toUpperCase()}
+          </Link>
+        </div>
 
         <div className="grid grid-cols-4 gap-x-5 gap-y-5">
           {products.map(product => (

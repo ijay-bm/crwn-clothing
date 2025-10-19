@@ -15,24 +15,27 @@ export function meta({}: Route.MetaArgs) {
 
 /**
  * * Actually a categories page rather than a home page
- *
- * TODO - add loading state for component in addition to passing it off to the CategoryCard
  */
 export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     try {
+      setLoading(true);
       categoryService.all().then(setCategories);
     } catch (error: unknown) {
       errorHandler(error);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   return (
     <div className="flex w-full flex-wrap items-center justify-between gap-10">
       {categories.map(category => (
-        <CategoryCard key={category.id} category={category} />
+        <CategoryCard key={category.id} category={category} loading={loading} />
       ))}
     </div>
   );

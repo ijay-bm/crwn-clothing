@@ -8,8 +8,6 @@ interface CartState {
   incrementQuantity: (productId: string) => void;
   decrementQuantity: (productId: string) => void;
   removeFromCart: (itemId: number) => void;
-  isOpen: Boolean;
-  setIsOpen: (isOpen: Boolean) => void;
 }
 
 export const useCartStore = create<CartState>(set => ({
@@ -60,6 +58,4 @@ export const useCartStore = create<CartState>(set => ({
       cart: cart.filter(item => item.id !== itemId),
     }));
   },
-  isOpen: false,
-  setIsOpen: isOpen => set({ isOpen }),
 }));

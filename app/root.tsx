@@ -10,9 +10,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import Button from "./components/button";
 import TopNavBar from "./components/top-nav-bar";
-import { categoryService } from "./services/category.service";
 import { intitializeOnAuthStateChanged } from "./store/auth";
 
 export const links: Route.LinksFunction = () => [
@@ -54,18 +52,12 @@ export default function App() {
 
   return (
     <>
-      <TopNavBar />
-      <main>
-        <Button
-          className="hidden"
-          onClick={() => {
-            categoryService.seedCategories();
-          }}
-        >
-          SEED
-        </Button>
-        <Outlet />
-      </main>
+      <div className="mx-auto max-w-7xl px-10 py-5">
+        <TopNavBar />
+        <main>
+          <Outlet />
+        </main>
+      </div>
     </>
   );
 }

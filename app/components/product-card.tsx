@@ -1,23 +1,55 @@
+import clsx from "clsx";
+import { EllipsisIcon, ImageIcon } from "lucide-react";
+import { useState } from "react";
 import { useCartStore } from "~/store/cart";
 import type { Product } from "~/types/product.types";
 
 import Button from "./button";
+import { Skeleton } from "./ui/skeleton";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addProductToCart } = useCartStore();
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
-    //  className="pointer relative flex h-[500px] w-full flex-col items-center
-    //     overflow-hidden shadow-2xl transition-all duration-[0.25s]
-    //     hover:scale-[1.01] hover:shadow-sm"
     <div
-      className="pointer relative flex h-[500px] w-full flex-col items-center
-        overflow-hidden shadow-2xl transition-all duration-200 hover:shadow-sm"
+      className={clsx(
+        `pointer relative flex h-[500px] w-full flex-col items-center
+        overflow-hidden transition-all duration-200`,
+        {
+          "shadow-2xl hover:shadow-sm": imageLoaded,
+        },
+      )}
     >
       <img
         src={product.imageUrl}
         alt={product.name}
-        className="h-full w-full object-cover"
+        onLoad={() => {
+          setImageLoaded(true);
+        }}
+        className={clsx(
+          "h-full w-full object-cover transition-all",
+          imageLoaded ? "opacity-100" : "opacity-0",
+        )}
       />
+
+      {!imageLoaded && (
+        <div
+          className="absolute z-20 flex h-full w-full items-center
+            justify-center"
+        >
+          <ImageIcon size="50" className="text-neutral-300" />
+          <EllipsisIcon size="50" className="text-neutral-300" />
+
+          <div
+            className="absolute z-20 flex h-full w-full items-center
+              justify-center"
+          >
+            <Skeleton className="h-full w-full rounded-none bg-neutral-200" />
+          </div>
+        </div>
+      )}
 
       <div className="absolute bottom-0 w-full">
         <div
