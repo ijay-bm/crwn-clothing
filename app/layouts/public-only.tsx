@@ -4,7 +4,7 @@ import { useAuthStore } from "~/store/auth";
 export default function PublicOnly() {
   const { user } = useAuthStore();
 
-  if (!user) {
+  if (user) {
     return <Navigate to="/" replace />;
   }
 

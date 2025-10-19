@@ -24,7 +24,7 @@ export default function TopNavBar() {
         <Link className="cursor-pointer px-3.5 py-2.5" to="/shop">
           SHOP
         </Link>
-        {!user ? (
+        {user?.uid ? (
           <button
             className="cursor-pointer px-3.5 py-2.5"
             onClick={onSignOutButtonClick}

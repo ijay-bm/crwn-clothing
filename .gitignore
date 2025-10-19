@@ -7,3 +7,5 @@
 /build/
 
 *copy*
+# Local Netlify folder
+.netlify

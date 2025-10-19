@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import type { ComponentPropsWithoutRef } from "react";
 
-import Spinner from "./spinner";
+import { Spinner } from "./ui/spinner";
 
 interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   color?: "blue" | "black";
@@ -33,8 +33,11 @@ const Button = ({
       disabled={isLoading || disabled}
       onClick={onClick}
     >
-      {isLoading && <Spinner small />}
-      {children}
+      {isLoading ? (
+        <Spinner className="self-center justify-self-center" />
+      ) : (
+        children
+      )}
     </button>
   );
 };

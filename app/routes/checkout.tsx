@@ -1,3 +1,8 @@
+import { Elements } from "@stripe/react-stripe-js";
+import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
+import { useMemo } from "react";
+import PaymentForm from "~/components/payment-form";
+import { stripePromise } from "~/components/stripe";
 import { useCartStore } from "~/store/cart";
 
 import type { Route } from "./+types/home";
@@ -14,6 +19,14 @@ export default function Checkout() {
     (acc, { product: { price }, quantity }) => acc + price * quantity,
     0,
   );
+
+  const promise = useMemo(() => {
+    return fetch("/create-checkout-session", {
+      method: "POST",
+    })
+      .then(res => res.json())
+      .then(data => data.clientSecret);
+  }, []);
 
   return (
     <div className="">
@@ -91,8 +104,16 @@ export default function Checkout() {
           <p className="text-[36px] font-light">{total}</p>
           <p className="text-[24px] font-light">$</p>
         </div>
-        {/* <PaymentForm /> */}
       </div>
+
+      <CheckoutProvider
+        stripe={stripePromise}
+        options={{ clientSecret: promise }}
+      >
+        <Elements stripe={stripePromise}>
+          <PaymentForm />
+        </Elements>
+      </CheckoutProvider>
     </div>
   );
 }

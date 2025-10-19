@@ -1,5 +1,5 @@
 [build]
-command = "react-router build"
+command = "node scripts/generate-env.js && react-router build"
 publish = "build/client"
 
 [dev]
