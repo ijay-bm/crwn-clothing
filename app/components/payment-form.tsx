@@ -36,8 +36,6 @@ export default function PaymentForm() {
 
     setIsLoading(true);
 
-    console.log("here");
-
     const response = await fetch("/.netlify/functions/create-payment-intent", {
       method: "post",
       headers: {

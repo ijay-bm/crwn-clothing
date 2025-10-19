@@ -1,36 +1,21 @@
-import { ShoppingBagIcon, ShoppingCartIcon } from "lucide-react";
+import { ShoppingCartIcon } from "lucide-react";
 import { Link } from "react-router";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useAuth } from "~/hooks/useAuth";
-import { useAuthStore } from "~/store/auth";
 import { useCartStore } from "~/store/cart";
 
 import Button from "./button";
 import CartItem from "./cart-item";
 
 export default function CartButton() {
-  const { user, loading } = useAuthStore();
-
-  const { logout } = useAuth();
-
   const { cart } = useCartStore();
 
-  async function onSignOutButtonClick() {
-    await logout();
-  }
+  const itemCount = cart.reduce((acc, cartItem) => acc + cartItem.quantity, 0);
 
   return (
     <DropdownMenu modal={false}>
@@ -40,6 +25,15 @@ export default function CartButton() {
             justify-center px-1.5"
         >
           <ShoppingCartIcon />
+          {!!itemCount && (
+            <span
+              className="absolute top-0 -right-0.5 flex h-5 w-5 items-center
+                justify-center rounded-full bg-red-700/90 text-xs font-bold
+                text-neutral-100"
+            >
+              {itemCount > 9 ? "9+" : itemCount}
+            </span>
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" sticky={"always"}>
