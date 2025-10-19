@@ -1,14 +1,19 @@
+import { useEffect } from "react";
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import Button from "./components/button";
+import TopNavBar from "./components/top-nav-bar";
+import { categoryService } from "./services/category.service";
+import { intitializeOnAuthStateChanged } from "./store/auth";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,7 +47,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  useEffect(() => {
+    const unsubscribe = intitializeOnAuthStateChanged();
+    return unsubscribe;
+  }, []);
+
+  return (
+    <>
+      <TopNavBar />
+      <main>
+        <Button
+          className="hidden"
+          onClick={() => {
+            categoryService.seedCategories();
+          }}
+        >
+          SEED
+        </Button>
+        <Outlet />
+      </main>
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
@@ -62,11 +87,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="container mx-auto p-4 pt-16">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
+        <pre className="w-full overflow-x-auto p-4">
           <code>{stack}</code>
         </pre>
       )}

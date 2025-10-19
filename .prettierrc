@@ -1,0 +1,32 @@
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "semi": true,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-classnames",
+    "prettier-plugin-merge"
+  ],
+  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "useTabs": false,
+  "quoteProps": "as-needed",
+  "arrowParens": "avoid",
+  "htmlWhitespaceSensitivity": "css",
+  "tailwindFunctions": ["clsx"],
+  "customFunctions": ["clsx"],
+  "overrides": [
+    {
+      "files": "app/firebase/errorMap.ts",
+      "options": {
+        "printWidth": 400
+      }
+    }
+  ]
+}
