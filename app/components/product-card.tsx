@@ -57,7 +57,7 @@ export default function ProductCard({ product }: { product: Product }) {
             text-[#e4e4e4e4] backdrop-blur-[5px]"
         >
           <h2 className="">{product.name}</h2>
-          <p className="">{product.price}</p>
+          <p className="">${product.price}</p>
         </div>
       </div>
 
