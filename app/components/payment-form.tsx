@@ -94,7 +94,7 @@ export default function PaymentForm() {
           }}
         />
         <Button className="mt-7" isLoading={isLoading} disabled={isLoading}>
-          Submit
+          PAY NOW
         </Button>
       </form>
     </div>
