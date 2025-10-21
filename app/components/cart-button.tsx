@@ -42,8 +42,8 @@ export default function CartButton() {
             <DropdownMenuGroup>
               <div className="flex h-[240px] flex-col overflow-auto">
                 {cart.map(item => (
-                  <DropdownMenuLabel>
-                    <CartItem key={item.id} cartItem={item} />
+                  <DropdownMenuLabel key={item.id}>
+                    <CartItem cartItem={item} />
                   </DropdownMenuLabel>
                 ))}
               </div>

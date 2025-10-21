@@ -8,7 +8,6 @@ import Button from "./button";
 export default function PaymentForm() {
   const stripe = useStripe();
   const elements = useElements();
-  // const totalAmount = useSelector(selectCartTotal);
 
   const { profile } = useAuthStore();
 
