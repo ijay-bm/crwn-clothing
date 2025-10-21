@@ -27,7 +27,7 @@ export default function SignIn() {
         color="blue"
         disabled={loading}
       >
-        Login With Google <GoogleSvg height="30" />
+        Sign In With Google <GoogleSvg height="30" />
       </Button>
 
       <hr className="my-5 border-neutral-200" />

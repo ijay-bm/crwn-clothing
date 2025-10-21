@@ -1,9 +1,7 @@
-import { FirebaseError } from "firebase/app";
 import { type ComponentPropsWithoutRef, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import InputGroup from "~/components/input-group";
 import { errorHandler } from "~/firebase/errorHandler";
-import { errorMap } from "~/firebase/errorMap";
 import { useAuth } from "~/hooks/useAuth";
 
 import Button from "./button";
@@ -25,7 +23,6 @@ export default function SignUpForm({ formAttributes }: SignUpFormProps) {
     formState: { errors },
     handleSubmit,
     watch,
-    reset,
   } = useForm<SignUpFormProperties>();
 
   const { register } = useAuth();

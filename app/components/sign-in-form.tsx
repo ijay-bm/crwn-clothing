@@ -1,9 +1,7 @@
-import { FirebaseError } from "firebase/app";
 import { type ComponentPropsWithoutRef, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import InputGroup from "~/components/input-group";
 import { errorHandler } from "~/firebase/errorHandler";
-import { errorMap } from "~/firebase/errorMap";
 import { useAuth } from "~/hooks/useAuth";
 
 import Button from "./button";
@@ -22,8 +20,6 @@ export default function SigninForm({ formAttributes }: SignUpFormProps) {
     register: bind,
     formState: { errors },
     handleSubmit,
-    watch,
-    reset,
   } = useForm<SignInFormProperties>();
 
   const { login } = useAuth();
@@ -34,7 +30,6 @@ export default function SigninForm({ formAttributes }: SignUpFormProps) {
     try {
       setIsLoading(true);
       const response = await login(data.email, data.password);
-      console.log(response);
     } catch (error: unknown) {
       errorHandler(error);
     } finally {
