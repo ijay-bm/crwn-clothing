@@ -1,7 +1,13 @@
 import { useCartStore } from "~/store/cart";
-import type { CartItem } from "~/types/cart.types";
 
-export default function CartItem({ cartItem }: { cartItem: CartItem }) {
+export default function CartItem({ cartId }: { cartId: number }) {
+  // Testing isolated rendering by passing the cartId instead of the cartItem object
+  const cartItem = useCartStore(state =>
+    state.cart.find(item => item.id === cartId),
+  );
+
+  if (!cartItem) return null;
+
   const { incrementQuantity, decrementQuantity } = useCartStore();
 
   return (

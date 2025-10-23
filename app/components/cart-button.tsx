@@ -1,5 +1,6 @@
 import { ShoppingCartIcon } from "lucide-react";
 import { Link } from "react-router";
+import { useShallow } from "zustand/shallow";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +11,14 @@ import {
 import { useCartStore } from "~/store/cart";
 
 import Button from "./button";
+import CartButtonCount from "./cart-button-count";
 import CartItem from "./cart-item";
 
 export default function CartButton() {
-  const { cart } = useCartStore();
-
-  const itemCount = cart.reduce((acc, cartItem) => acc + cartItem.quantity, 0);
+  // Testing isolated rendering by plucking IDs instead of the array of objects
+  const cartIds = useCartStore(
+    useShallow(state => state.cart.map(item => item.id)),
+  );
 
   return (
     <DropdownMenu modal={false}>
@@ -25,25 +28,17 @@ export default function CartButton() {
             justify-center px-1.5"
         >
           <ShoppingCartIcon />
-          {!!itemCount && (
-            <span
-              className="absolute top-0 -right-0.5 flex h-5 w-5 items-center
-                justify-center rounded-full bg-red-700/90 text-xs font-bold
-                text-neutral-100"
-            >
-              {itemCount > 9 ? "9+" : itemCount}
-            </span>
-          )}
+          <CartButtonCount />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" sticky={"always"}>
-        {cart?.length ? (
+        {cartIds?.length ? (
           <>
             <DropdownMenuGroup>
               <div className="flex h-[240px] flex-col overflow-auto">
-                {cart.map(item => (
-                  <DropdownMenuLabel key={item.id}>
-                    <CartItem cartItem={item} />
+                {cartIds.map(cartId => (
+                  <DropdownMenuLabel key={cartId}>
+                    <CartItem cartId={cartId} />
                   </DropdownMenuLabel>
                 ))}
               </div>
